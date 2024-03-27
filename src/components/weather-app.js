@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCloudSun, faCloudRain, faSun, faCloud, faSnowflake } from '@fortawesome/free-solid-svg-icons';
-import '../weatherapp.css';
+import { faTint, faWind, faCompass, faTachometerAlt, faEye, faSun, faCloud, faCloudRain, faSnowflake, faThermometerHalf } from '@fortawesome/free-solid-svg-icons';
 import { Container, Button, Card } from 'react-bootstrap';
+import '../weatherapp.css';
 
 function WeatherApp() {
     const [country, setCountry] = useState(null);
@@ -72,7 +72,7 @@ function WeatherApp() {
         if (weatherCode >= 600 && weatherCode < 700) return faSnowflake; // Snow
         if (weatherCode >= 700 && weatherCode < 800) return faCloud; // Atmosphere
         if (weatherCode === 800) return faSun; // Clear
-        if (weatherCode > 800) return faCloudSun; // Clouds
+        if (weatherCode > 800) return faCloud; // Clouds
         return null;
     };
 
@@ -116,18 +116,31 @@ function WeatherApp() {
                     <Button variant="primary" type="submit" onClick={handleSubmit}>
                         Get Weather
                     </Button>
-
                 </div>
-
                 {error && <p className="text-danger mt-2">{error}</p>}
                 {weather && (
                     <Card className="mt-4">
                         <Card.Body>
                             <div className="weather-info">
-                                <div className='m-3 temperature'>{country ? country.label : ''}</div>
-                                <FontAwesomeIcon className='m-3 temperature' icon={getWeatherIcon()} size="3x" />
-                                <div className="temperature">{Math.round(weather.main.temp)}°C</div>
-                                <div className="temperature">{weather.weather[0].description}</div>
+                                <div className="column">
+                                    <div className="m-3 temperature">{country ? country.label : ''}</div>
+                                    <FontAwesomeIcon className="m-3 temperature" icon={getWeatherIcon()} size="3x" />
+                                    <div className="temperature">{Math.round(weather.main.temp)}°C</div>
+                                    <div className="temperature">{weather.weather[0].description}</div>
+                                    <div className="temperature"><FontAwesomeIcon icon={faTint} /> Humidity: {weather.main.humidity}%</div>
+                                    <div className="temperature"><FontAwesomeIcon icon={faWind} /> Wind Speed: {weather.wind.speed} m/s</div>
+                                    <div className="temperature"><FontAwesomeIcon icon={faCompass} /> Wind Direction: {weather.wind.deg}°</div>
+                                    <div className="temperature"><FontAwesomeIcon icon={faTachometerAlt} /> Air Pressure: {weather.main.pressure} hPa</div>
+                                </div>
+                                <div className="column">
+                                    <div className="temperature"><FontAwesomeIcon icon={faEye} /> Visibility: {weather.visibility / 1000} km</div>
+                                    <div className="temperature"><FontAwesomeIcon icon={faSun} /> Sunrise: {new Date(weather.sys.sunrise * 1000).toLocaleTimeString()}</div>
+                                    <div className="temperature"><FontAwesomeIcon icon={faSun} /> Sunset: {new Date(weather.sys.sunset * 1000).toLocaleTimeString()}</div>
+                                    <div className="temperature"><FontAwesomeIcon icon={faSun} /> UV Index: {weather.uvi}</div>
+                                    <div className="temperature"><FontAwesomeIcon icon={faCloudRain} /> Precipitation: {weather.clouds.all}%</div>
+                                    <div className="temperature"><FontAwesomeIcon icon={faCloud} /> Cloud Cover: {weather.clouds.all}%</div>
+                                    <div className="temperature"><FontAwesomeIcon icon={faThermometerHalf} /> Dew Point: {weather.main.temp - ((100 - weather.main.humidity) / 5)}</div>
+                                </div>
                             </div>
                         </Card.Body>
                     </Card>
@@ -136,5 +149,4 @@ function WeatherApp() {
         </div>
     );
 }
-
 export default WeatherApp;
