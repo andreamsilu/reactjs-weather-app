@@ -155,6 +155,8 @@ h1 {
 }
 
 .time-date {
-  text-align: center;
-  /* display: flex; */
+  text-align:start;
+  justify-content: space-between;
+  display: flex;
+
 }
