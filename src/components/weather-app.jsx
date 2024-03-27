@@ -106,40 +106,48 @@ function WeatherApp() {
                     <p className="current-time">{dateTime.toLocaleTimeString()}</p>
                 </div>
                 <div className="form-row">
-                    <Select
-                        className="form-control country-selector"
-                        options={countriesOptions}
-                        value={country}
-                        onChange={setCountry}
-                        placeholder="Select a country..."
-                    />
-                    <Button variant="primary" type="submit" onClick={handleSubmit}>
-                        Get Weather
-                    </Button>
+                    <div className="col-md-6">
+                        <Select
+                            className="form-control country-selector"
+                            options={countriesOptions}
+                            value={country}
+                            onChange={setCountry}
+                            placeholder="Select a country..."
+                        />
+                    </div>
+                    <div className="col-md-6">
+                        <Button variant="primary" type="submit" onClick={handleSubmit}>
+                            Get Weather
+                        </Button>
+                    </div>
                 </div>
                 {error && <p className="text-danger mt-2">{error}</p>}
                 {weather && (
                     <Card className="mt-4">
                         <Card.Body>
-                            <div className="weather-info">
-                                <div className="column">
-                                    <div className="m-3 temperature">{country ? country.label : ''}</div>
-                                    <FontAwesomeIcon className="m-3 temperature" icon={getWeatherIcon()} size="3x" />
-                                    <div className="temperature">{Math.round(weather.main.temp)}°C</div>
-                                    <div className="temperature">{weather.weather[0].description}</div>
-                                    <div className="temperature"><FontAwesomeIcon icon={faTint} /> Humidity: {weather.main.humidity}%</div>
-                                    <div className="temperature"><FontAwesomeIcon icon={faWind} /> Wind Speed: {weather.wind.speed} m/s</div>
-                                    <div className="temperature"><FontAwesomeIcon icon={faCompass} /> Wind Direction: {weather.wind.deg}°</div>
-                                    <div className="temperature"><FontAwesomeIcon icon={faTachometerAlt} /> Air Pressure: {weather.main.pressure} hPa</div>
+                            <div className="row">
+                            <div className="m-3 temperature text-center"><h1>Current Weather condition of {country ? country.label : ''}</h1></div>
+                                <div className="col-md-6">
+                                    <div className="weather-info">
+                                        <FontAwesomeIcon className="m-3 temperature" icon={getWeatherIcon()} size="3x" />
+                                        <div className="temperature">{Math.round(weather.main.temp)}°C</div>
+                                        <div className="temperature">{weather.weather[0].description}</div>
+                                        <div className="temperature"><FontAwesomeIcon icon={faTint} /> Humidity: {weather.main.humidity}%</div>
+                                        <div className="temperature"><FontAwesomeIcon icon={faWind} /> Wind Speed: {weather.wind.speed} m/s</div>
+                                        <div className="temperature"><FontAwesomeIcon icon={faCompass} /> Wind Direction: {weather.wind.deg}°</div>
+                                        <div className="temperature"><FontAwesomeIcon icon={faTachometerAlt} /> Air Pressure: {weather.main.pressure} hPa</div>
+                                    </div>
                                 </div>
-                                <div className="column">
-                                    <div className="temperature"><FontAwesomeIcon icon={faEye} /> Visibility: {weather.visibility / 1000} km</div>
-                                    <div className="temperature"><FontAwesomeIcon icon={faSun} /> Sunrise: {new Date(weather.sys.sunrise * 1000).toLocaleTimeString()}</div>
-                                    <div className="temperature"><FontAwesomeIcon icon={faSun} /> Sunset: {new Date(weather.sys.sunset * 1000).toLocaleTimeString()}</div>
-                                    <div className="temperature"><FontAwesomeIcon icon={faSun} /> UV Index: {weather.uvi}</div>
-                                    <div className="temperature"><FontAwesomeIcon icon={faCloudRain} /> Precipitation: {weather.clouds.all}%</div>
-                                    <div className="temperature"><FontAwesomeIcon icon={faCloud} /> Cloud Cover: {weather.clouds.all}%</div>
-                                    <div className="temperature"><FontAwesomeIcon icon={faThermometerHalf} /> Dew Point: {weather.main.temp - ((100 - weather.main.humidity) / 5)}</div>
+                                <div className="col-md-6">
+                                    <div className="weather-info">
+                                        <div className="temperature"><FontAwesomeIcon icon={faEye} /> Visibility: {weather.visibility / 1000} km</div>
+                                        <div className="temperature"><FontAwesomeIcon icon={faSun} /> Sunrise: {new Date(weather.sys.sunrise * 1000).toLocaleTimeString()}</div>
+                                        <div className="temperature"><FontAwesomeIcon icon={faSun} /> Sunset: {new Date(weather.sys.sunset * 1000).toLocaleTimeString()}</div>
+                                        <div className="temperature"><FontAwesomeIcon icon={faSun} /> UV Index: {weather.uvi}</div>
+                                        <div className="temperature"><FontAwesomeIcon icon={faCloudRain} /> Precipitation: {weather.clouds.all}%</div>
+                                        <div className="temperature"><FontAwesomeIcon icon={faCloud} /> Cloud Cover: {weather.clouds.all}%</div>
+                                        <div className="temperature"><FontAwesomeIcon icon={faThermometerHalf} /> Dew Point: {weather.main.temp - ((100 - weather.main.humidity) / 5)}</div>
+                                    </div>
                                 </div>
                             </div>
                         </Card.Body>
@@ -147,6 +155,7 @@ function WeatherApp() {
                 )}
             </Container>
         </div>
+
     );
 }
 export default WeatherApp;
