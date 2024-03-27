@@ -5,20 +5,18 @@ import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudSun, faCloudRain, faSun, faCloud, faSnowflake } from '@fortawesome/free-solid-svg-icons';
 import '../weatherapp.css';
+import WeatherTrendGraph from './weather-graph';
 
 function WeatherApp() {
-    const [country, setCountry] = useState({ value: 'TZ', label: 'Tanzania' });
-    const [city, setCity] = useState('United Republic of Tanzania');
+    const [country, setCountry] = useState(null);
     const [weather, setWeather] = useState(null);
     const [error, setError] = useState('');
     const [countriesOptions, setCountriesOptions] = useState([]);
-    const [citiesOptions, setCitiesOptions] = useState([]);
     const [dateTime, setDateTime] = useState(new Date());
 
     const API_KEY = '03c3df4d3139d6c3fd7bbf7afc67fc66';
 
     useEffect(() => {
-        // Fetch countries from REST Countries API
         axios
             .get('https://restcountries.com/v3.1/all')
             .then((response) => {
@@ -26,7 +24,6 @@ function WeatherApp() {
                     value: country.cca2,
                     label: country.name.common,
                 }));
-                // Sort countries alphabetically
                 const sortedCountries = countries.sort((a, b) => a.label.localeCompare(b.label));
                 setCountriesOptions(sortedCountries);
             })
@@ -45,29 +42,19 @@ function WeatherApp() {
         };
     }, []);
 
-    const fetchCities = async () => {
-        if (!country) return;
-
-        try {
-            // Fetch cities based on selected country
-            const response = await axios.get(
-                `http://api.openweathermap.org/data/2.5/find?q=${country.label}&appid=${API_KEY}`
-            );
-            const cities = response.data.list.map((city) => ({
-                value: city.name,
-                label: city.name,
-            }));
-            setCitiesOptions(cities);
-        } catch (error) {
-            console.error('Error fetching cities:', error);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!country) {
+            setError('Please select a country.');
+            return;
         }
+        await fetchWeatherData();
     };
 
     const fetchWeatherData = async () => {
         try {
-            // Fetch weather data based on selected city and country
             const response = await axios.get(
-                `http://api.openweathermap.org/data/2.5/weather?q=${city},${country.label}&appid=${API_KEY}&units=metric`
+                `https://api.openweathermap.org/data/2.5/weather?q=${country.label}&appid=${API_KEY}&units=metric`
             );
             setWeather(response.data);
             setError('');
@@ -90,17 +77,11 @@ function WeatherApp() {
         return null;
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        fetchWeatherData();
-    };
-
     const getTimeForCountry = async () => {
-        if (!country) return;
+        if (!country) return '';
 
         try {
-            // Fetch timezone based on selected country
-            const response = await axios.get(`http://worldtimeapi.org/api/timezone/${country.label}`);
+            const response = await axios.get(`https://worldtimeapi.org/api/timezone/${country.label}`);
             const countryTime = new Date(response.data.datetime);
             return countryTime.toLocaleTimeString();
         } catch (error) {
@@ -109,34 +90,29 @@ function WeatherApp() {
         }
     };
 
+    useEffect(() => {
+        const updateTime = async () => {
+            const countryTime = await getTimeForCountry();
+            setDateTime(new Date(countryTime));
+        };
+        updateTime();
+    }, [country]); // Update time when country changes
+
     return (
         <div className={`weather-app ${weather && getWeatherIcon() ? weather.weather[0].main.toLowerCase() : ''}`}>
             <Container>
-                <h1 className="mb-4">Reactjs Weather App</h1>
+                <h1 className="mb-4"> Weather App</h1>
                 <div className="time-date">
                     <p className="current-date">{dateTime.toDateString()}</p>
-                    <p className="current-time">{dateTime
-                        .toLocaleTimeString()}</p>
+                    <p className="current-time">{dateTime.toLocaleTimeString()}</p>
                 </div>
                 <Form onSubmit={handleSubmit}>
                     <Select
-                        className=" form-control"
+                        className="form-control country-selector"
                         options={countriesOptions}
-                        placeholder="Select Country"
-                        onChange={async (selectedOption) => {
-                            setCountry(selectedOption);
-                            setCitiesOptions([]);
-                            const countryTime = await getTimeForCountry(selectedOption.value);
-                            setDateTime(new Date(countryTime));
-                        }}
-                        onBlur={fetchCities}
-                    />
-                    <Select
-                        className=" form-control"
-                        options={citiesOptions}
-                        placeholder="Select City"
-                        isDisabled={!country}
-                        onChange={(selectedOption) => setCity(selectedOption.value)}
+                        value={country}
+                        onChange={setCountry}
+                        placeholder="Select a country..."
                     />
                     <Button variant="primary" type="submit">
                         Get Weather
@@ -147,7 +123,7 @@ function WeatherApp() {
                     <Card className="mt-4">
                         <Card.Body>
                             <div className="weather-info">
-                                <div className='m-3 temperature'>{country.label}</div>
+                                <div className='m-3 temperature'>{country ? country.label : ''}</div>
                                 <FontAwesomeIcon className='m-3 temperature' icon={getWeatherIcon()} size="3x" />
                                 <div className="temperature">{Math.round(weather.main.temp)}°C</div>
                                 <div className="temperature">{weather.weather[0].description}</div>
@@ -156,6 +132,7 @@ function WeatherApp() {
                     </Card>
                 )}
             </Container>
+            {/* <WeatherTrendGraph/> */}
         </div>
     );
 }
