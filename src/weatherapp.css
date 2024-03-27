@@ -20,6 +20,7 @@ body {
 }
 
 .container {
+  margin-top: 20px;
   background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
   padding: 20px;
   border-radius: 10px;

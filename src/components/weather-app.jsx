@@ -101,7 +101,7 @@ function WeatherApp() {
         <>
             <div className={`weather-app ${weather && getWeatherIcon() ? weather.weather[0].main.toLowerCase() : ''}`}>
                 <Container>
-                    <h1 className="mb-4">Weather App</h1>
+                    <h1 className="mb-2">Weather App</h1>
                     <div className="time-date">
                         <p className="current-date">{dateTime.toDateString()}</p>
                         <p className="current-time">{dateTime.toLocaleTimeString()}</p>
