@@ -3,7 +3,7 @@ import axios from 'axios';
 import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTint, faWind, faCompass, faTachometerAlt, faEye, faSun, faCloud, faCloudRain, faSnowflake, faThermometerHalf } from '@fortawesome/free-solid-svg-icons';
-import { Container, Button, Row, Col, Card } from 'react-bootstrap';
+import { Container, Button, Row, Col} from 'react-bootstrap';
 import '../weatherapp.css';
 
 function WeatherApp() {
