@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Form, Button, Card } from 'react-bootstrap';
 import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudSun, faCloudRain, faSun, faCloud, faSnowflake } from '@fortawesome/free-solid-svg-icons';
 import '../weatherapp.css';
-import WeatherTrendGraph from './weather-graph';
+import { Container, Button, Card } from 'react-bootstrap';
 
 function WeatherApp() {
     const [country, setCountry] = useState(null);
@@ -77,20 +76,20 @@ function WeatherApp() {
         return null;
     };
 
-    const getTimeForCountry = async () => {
-        if (!country) return '';
-
-        try {
-            const response = await axios.get(`https://worldtimeapi.org/api/timezone/${country.label}`);
-            const countryTime = new Date(response.data.datetime);
-            return countryTime.toLocaleTimeString();
-        } catch (error) {
-            console.error('Error fetching time for country:', error);
-            return '';
-        }
-    };
-
     useEffect(() => {
+        const getTimeForCountry = async () => {
+            if (!country) return '';
+
+            try {
+                const response = await axios.get(`https://worldtimeapi.org/api/timezone/${country.label}`);
+                const countryTime = new Date(response.data.datetime);
+                return countryTime.toLocaleTimeString();
+            } catch (error) {
+                console.error('Error fetching time for country:', error);
+                return '';
+            }
+        };
+
         const updateTime = async () => {
             const countryTime = await getTimeForCountry();
             setDateTime(new Date(countryTime));
@@ -101,12 +100,12 @@ function WeatherApp() {
     return (
         <div className={`weather-app ${weather && getWeatherIcon() ? weather.weather[0].main.toLowerCase() : ''}`}>
             <Container>
-                <h1 className="mb-4"> Weather App</h1>
+                <h1 className="mb-4">Weather App</h1>
                 <div className="time-date">
                     <p className="current-date">{dateTime.toDateString()}</p>
                     <p className="current-time">{dateTime.toLocaleTimeString()}</p>
                 </div>
-                <Form onSubmit={handleSubmit}>
+                <div className="form-row">
                     <Select
                         className="form-control country-selector"
                         options={countriesOptions}
@@ -114,10 +113,12 @@ function WeatherApp() {
                         onChange={setCountry}
                         placeholder="Select a country..."
                     />
-                    <Button variant="primary" type="submit">
+                    <Button variant="primary" type="submit" onClick={handleSubmit}>
                         Get Weather
                     </Button>
-                </Form>
+
+                </div>
+
                 {error && <p className="text-danger mt-2">{error}</p>}
                 {weather && (
                     <Card className="mt-4">
@@ -132,7 +133,6 @@ function WeatherApp() {
                     </Card>
                 )}
             </Container>
-            {/* <WeatherTrendGraph/> */}
         </div>
     );
 }

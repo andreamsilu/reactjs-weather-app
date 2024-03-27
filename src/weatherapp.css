@@ -82,11 +82,22 @@ body {
     color: #ff4d4d;
   }
   
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.country-selector {
+    flex: 1; /* Take remaining space */
+    margin-right: 10px; /* Adjust margin between the select and button */
+}
   /* Button styles */
   .btn-primary {
-    margin-left: 150px;
-    margin-top: 20px;
-    padding: 10px 20px;
+    margin-bottom: 20px;
+    /* margin-right: auto; */
+    /* margin-top: 20px; */
+    padding: 20px;
     border: none;
     border-radius: 5px;
     background-color: #007bff; /* Primary color */
@@ -94,7 +105,8 @@ body {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
+}
+
   
   .btn-primary:hover {
     background-color: #0056b3; /* Darker shade of primary color on hover */
