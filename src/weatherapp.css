@@ -63,6 +63,8 @@ h1 {
   color: #444444;
 }
 
+
+
 .select-container select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -119,7 +121,7 @@ h1 {
 }
 
 .weather-card {
-  display: flex;
+  /* display: flex; */
   align-items: start;
   background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent background */
   padding: 20px;
@@ -128,7 +130,7 @@ h1 {
 }
 
 .weather-info {
-  display: flex;
+  display:-webkit-flex;
   align-items: center;
   flex-direction: row;
   left: 20px;
